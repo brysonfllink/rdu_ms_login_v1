@@ -3,6 +3,8 @@ package com.linktic.login.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 @Table
 @Entity(name = "contact")

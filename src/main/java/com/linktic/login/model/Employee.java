@@ -11,13 +11,15 @@ import java.util.List;
 public class Employee {
 
     @Id
+    @Column(name = "idEmployee")
     private Integer idEmployee;
 
     @OneToOne
+    @JoinColumn(name = "IdProfile")
+    private ResourceProfiles profiles;
+
+    @ManyToOne
     @JoinColumn(name = "IdContact")
     private Contact contact;
 
-    @OneToMany
-    @JoinColumn(name = "IdProfile")
-    private List<ResourceProfiles> profiles;
 }

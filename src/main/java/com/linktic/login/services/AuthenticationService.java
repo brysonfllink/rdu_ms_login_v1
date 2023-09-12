@@ -5,9 +5,10 @@ import com.linktic.login.dto.SecurityDTO;
 import com.linktic.login.mapper.ICompanyMapper;
 import com.linktic.login.mapper.IResourceProfilesMapper;
 import com.linktic.login.mapper.ISecurityMapper;
+import com.linktic.login.model.Contact;
 import com.linktic.login.model.Employee;
 import com.linktic.login.model.Security;
-import com.linktic.login.repository.ICompanyRepository;
+import com.linktic.login.repository.IContactRepository;
 import com.linktic.login.repository.IEmployeeRepository;
 import com.linktic.login.repository.ISecurityRepository;
 import com.linktic.login.request.LoginDTO;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +26,7 @@ public class AuthenticationService implements IAuthenticationService {
 
     private final IResourceProfilesMapper resourceProfilesMapper;
     private final ISecurityRepository securityRepository;
+    private final IContactRepository contactRepository;
     private final IEmployeeRepository employeeRepository;
 
     private final SecurityConfig securityConfig;
@@ -37,11 +40,10 @@ public class AuthenticationService implements IAuthenticationService {
 
         if (security.isPresent()) {
             if (securityConfig.passwordEncoder().matches(login.getPassword(), security.get().getPassword())) {
-                List<Employee> employees = employeeRepository.findEmployeesByContactId(security.get().getContact().getIdContact());
+                List<Contact> result = contactRepository.findAllById(Collections.singleton(security.get().getContact().getIdContact()));
+                //List<Employee> result = employeeRepository.findEmployeesByContactId(security.get().getContact().getIdContact());
 
-                System.out.println(employees);
-
-                return (ResponseEntity<T>) ResponseEntity.ok().body(employees);
+                return (ResponseEntity<T>) ResponseEntity.ok().body(result);
             }
         }
 
