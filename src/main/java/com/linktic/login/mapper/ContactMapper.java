@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 public class ContactMapper implements IContactMapper {
 
     private final ICompanyMapper companyMapper;
+    private final IEmployeeMapper employeeMapper;
 
     @Override
     public ContactDTO contactToContactDTO(Contact contact) {
@@ -20,6 +21,7 @@ public class ContactMapper implements IContactMapper {
                 .fullName(contact.getFullName())
                 .jobTitle(contact.getJobTitle())
                 .company(companyMapper.companyToCompanyDTO(contact.getCompany()))
+                .employees(employeeMapper.employeesToEmployeesDTO(contact.getEmployees()))
                 .build();
     }
 }

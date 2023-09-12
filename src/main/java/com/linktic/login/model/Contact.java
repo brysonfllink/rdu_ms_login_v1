@@ -24,4 +24,7 @@ public class Contact {
     @JoinColumn(name = "IdCompany")
     private Company company;
 
+    @OneToMany(mappedBy = "contact")
+    private List<Employee> employees;
+
 }

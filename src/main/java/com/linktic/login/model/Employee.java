@@ -16,7 +16,7 @@ public class Employee {
 
     @OneToOne
     @JoinColumn(name = "IdProfile")
-    private ResourceProfiles profiles;
+    private ResourceProfiles profile;
 
     @ManyToOne
     @JoinColumn(name = "IdContact")
