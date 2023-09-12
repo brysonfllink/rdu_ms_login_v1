@@ -1,10 +1,9 @@
 package com.linktic.login.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.Getter;
 
+@Getter
 @Table
 @Entity(name = "security")
 public class Security {
@@ -18,5 +17,9 @@ public class Security {
 
     @Column(name = "Password")
     private String password;
+
+    @OneToOne
+    @JoinColumn(name = "idContact")
+    private Contact contact;
 
 }
