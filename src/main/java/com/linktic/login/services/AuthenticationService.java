@@ -39,7 +39,7 @@ public class AuthenticationService implements IAuthenticationService {
 
                 if(contact.isPresent()) {
                     ContactDTO contactDTO = contactMapper.contactToContactDTO(contact.get());
-                    return (ResponseEntity<T>) ResponseEntity.ok().body(contactDTO);
+                    return ResponseEntity.status(HttpStatus.OK).body((T) contactDTO);
                 } else {
                     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
                 }
