@@ -2,6 +2,8 @@ package com.linktic.login.services;
 
 import com.linktic.login.config.SecurityConfig;
 import com.linktic.login.dto.ContactDTO;
+import com.linktic.login.enums.Errors;
+import com.linktic.login.exceptions.NoUserException;
 import com.linktic.login.mapper.IContactMapper;
 import com.linktic.login.model.Contact;
 import com.linktic.login.model.Security;
@@ -46,6 +48,6 @@ public class AuthenticationService implements IAuthenticationService {
             }
         }
 
-        return null;
+        return (ResponseEntity<T>) ResponseEntity.status(HttpStatus.NO_CONTENT).body(new NoUserException(Errors.NO_USER_EXIST.toString()));
     }
 }
