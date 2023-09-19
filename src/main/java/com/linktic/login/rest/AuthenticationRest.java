@@ -1,13 +1,10 @@
-package com.linktic.login.controller;
+package com.linktic.login.rest;
 
-import com.linktic.login.dto.CompanyDTO;
 import com.linktic.login.request.LoginDTO;
 import com.linktic.login.services.IAuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("login")
@@ -20,6 +17,11 @@ public class AuthenticationRest {
     @PostMapping("validate")
     public <T> ResponseEntity<T> login(@RequestBody LoginDTO login) {
         return authenticationService.validateUserAndPassword(login);
+    }
+    
+    @PostMapping("log")
+    public ResponseEntity saveLoginLog(@RequestBody LoginDTO request) {
+		return authenticationService.saveLoginLog(request);
     }
 
 }
