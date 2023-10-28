@@ -20,6 +20,9 @@ public class Contact {
     @Column(name = "JobTitle")
     private String jobTitle;
 
+    @Column(name = "Email")
+    private String email;
+
     @OneToOne
     @JoinColumn(name = "IdCompany")
     private Company company;

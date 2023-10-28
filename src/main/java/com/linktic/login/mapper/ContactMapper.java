@@ -20,6 +20,7 @@ public class ContactMapper implements IContactMapper {
         return ContactDTO.builder()
                 .fullName(contact.getFullName())
                 .jobTitle(contact.getJobTitle())
+                .email(contact.getEmail())
                 .company(companyMapper.companyToCompanyDTO(contact.getCompany()))
                 .employees(employeeMapper.employeesToEmployeesDTO(contact.getEmployees()))
                 .build();
