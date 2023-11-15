@@ -1,0 +1,90 @@
+trigger:
+- dev
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+- name: MAVEN_CACHE_FOLDER
+  value: $(Pipeline.Workspace)/.m2/repository
+- name: AWS_REGION
+  value: us-east-1
+- name: AWS_ACCOUNT_ID
+  value: 693238724180
+- name: DOCKER_REPOSITORY_NAME
+  value: rdu_ms_login_v1
+
+resources:
+  repositories:
+    - repository: templates
+      type: git
+      name: Infraestructura-DevOps/devops_util_pipeline
+
+stages:
+- stage: Analyse
+  jobs:
+  - job: maven
+    steps:
+    - task: Cache@2
+      inputs:
+        key: 'maven | "$(Agent.OS)" | **/pom.xml'
+        restoreKeys: |
+          maven | "$(Agent.OS)"
+          maven
+        path: ${{ variables.MAVEN_CACHE_FOLDER }}
+      displayName: Cache Maven local repo
+    - task: Maven@4
+      inputs:
+        mavenPomFile: 'pom.xml'
+        publishJUnitResults: false
+        javaHomeOption: 'JDKVersion'
+        jdkVersionOption: '1.17'
+        mavenVersionOption: 'Default'
+        mavenAuthenticateFeed: false
+        effectivePomSkip: false
+        sonarQubeRunAnalysis: false
+        options: '-Dmaven.repo.local=$(MAVEN_CACHE_FOLDER)'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.SourcesDirectory)/target/rdu_ms_login_v1-0.0.1-SNAPSHOT.jar'
+        ArtifactName: 'artifact'
+
+- stage: Build_Docker
+  jobs: 
+  - job: Build_Docker 
+    steps:
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        artifactName: 'artifact'
+        targetPath: $(Build.SourcesDirectory)
+    
+    - task: AWSShellScript@1
+      inputs:
+        awsCredentials: 'aws-client-362'
+        regionName: 'us-east-1'
+        scriptType: 'inline'
+        inlineScript: 'aws ecr get-login-password --region $(AWS_REGION) | docker login --username AWS --password-stdin $(AWS_ACCOUNT_ID).dkr.ecr.$(AWS_REGION).amazonaws.com'
+
+    - template: steps-docker-ecr.yml@templates
+      parameters:
+        AWS_CREDENTIALS: aws-client-362
+        REPOSITORY_NAME: $(DOCKER_REPOSITORY_NAME)
+        AWS_REGION: $(AWS_REGION)
+  
+  - job: Archive_Instructions
+    steps:
+    - task: ArchiveFiles@1
+      inputs:
+        rootFolder: '$(Build.Repository.LocalPath)/scripts/'
+        includeRootFolder: false
+        archiveType: 'tar'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).tgz'
+      condition: succeeded()
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publicando artefacto'
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).tgz'
+        ArtifactName: artifact
+      condition: succeeded()        
