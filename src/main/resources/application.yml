@@ -1,8 +1,12 @@
 spring:
   datasource:
-    url: jdbc:mysql://${db.host}:3306/${db.name}?useSSL=false&allowPublicKeyRetrieval=true
-    username: ${db.user}
-    password: ${db.password}
+
+    url: jdbc:mysql://devopenppm-instance-1.cbtcsp2fo97t.us-east-1.rds.amazonaws.com/openppm
+    username: openppm
+    password: x0tr.u21O
+    #url: ${DB_URL}
+    #username: ${MYSQL_USERNAME}
+    #password: ${MYSQL_ROOT_PASSWORD}
     driverClassName: com.mysql.cj.jdbc.Driver
 
   jpa:
