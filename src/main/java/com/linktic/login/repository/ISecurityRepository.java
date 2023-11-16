@@ -11,7 +11,7 @@ import java.util.Optional;
 @Repository
 public interface ISecurityRepository extends JpaRepository<Security, Integer> {
 
-    @Query(value = "SELECT * FROM Security s WHERE s.Login = :login", nativeQuery = true)
+    @Query(value = "SELECT * FROM security s WHERE s.Login = :login", nativeQuery = true)
     Optional<Security> getUserByUsername(@Param("login") String username);
 
 }

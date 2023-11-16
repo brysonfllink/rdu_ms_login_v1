@@ -1,7 +1,7 @@
 spring:
   datasource:
 
-    url: jdbc:mysql://devopenppm-instance-1.cbtcsp2fo97t.us-east-1.rds.amazonaws.com/openppm
+    url: jdbc:mysql://devopenppm-instance-1.cbtcsp2fo97t.us-east-1.rds.amazonaws.com:3306/openppm
     username: openppm
     password: x0tr.u21O
     #url: ${DB_URL}
